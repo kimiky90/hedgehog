@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>괴혈병과 비타민 C 퀴즈</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h2 {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .options li {
+            background: #e9e9e9;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .options li:hover {
+            background: #d4d4d4;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .feedback p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>괴혈병과 비타민 C 퀴즈</h1>
+    <p>아래 퀴즈를 풀고 정답과 해설을 확인해 보세요.</p>
+
+    <div id="quiz-container"></div>
+
+</div>
+
+<script>
+    const quizData = [
+        {
+            question: "괴혈병의 주요 증상으로 가장 정확한 것은 무엇인가?",
+            options: [
+                "고열과 두통",
+                "잇몸 출혈, 이가 빠짐, 피부 갈라짐",
+                "근육 경련과 시력 상실",
+                "호흡 곤란과 심장 박동 이상"
+            ],
+            answer: 1,
+            rationale: "괴혈병은 콜라겐 합성 부족으로 인해 잇몸과 피부 조직이 약해져 출혈이 생기고 이가 빠지는 등의 증상이 나타납니다."
+        },
+        {
+            question: "17세기 영국 해군의 전형적인 식단에서 가장 부족했던 영양소는?",
+            options: [
+                "단백질",
+                "탄수화물",
+                "비타민 C",
+                "지방"
+            ],
+            answer: 2,
+            rationale: "장기 항해 중 신선한 과일과 채소를 구하기 어려워 비타민 C가 심각하게 부족했습니다."
+        },
+        {
+            question: "괴혈병의 근본 원인이 비타민 C 부족임을 최초로 발견한 과학자는?",
+            options: [
+                "제임스 쿡",
+                "제임스 린드",
+                "알버트 센트-죄르지",
+                "월터 노먼 코스"
+            ],
+            answer: 1,
+            rationale: "제임스 린드는 1747년 감귤류가 괴혈병을 예방하고 치료하는 효과가 있다는 것을 입증한 최초의 과학자입니다."
+        },
+        {
+            question: "콜라겐 합성에 가장 중요한 역할을 하는 영양소는?",
+            options: [
+                "비타민 A",
+                "비타민 B",
+                "비타민 C",
+                "비타민 D"
+            ],
+            answer: 2,
+            rationale: "비타민 C는 체내에서 콜라겐을 합성할 때 필수적인 조효소로 작용합니다."
+        },
+        {
+            question: "영국 해군이 괴혈병 예방을 위해 처음 도입한 식품은?",
+            options: [
+                "감자",
+                "라임 주스",
+                "당근",
+                "양배추"
+            ],
+            answer: 1,
+            rationale: "제임스 린드의 연구 이후 영국 해군은 라임 주스를 식단에 포함시켜 괴혈병을 효과적으로 예방했습니다."
+        },
+        {
+            question: "비타민 C의 학술적 이름 '아스코르브산'의 어원적 의미는?",
+            options: [
+                "건강한 신체",
+                "괴혈병 없음",
+                "과일의 힘",
+                "영양 보충"
+            ],
+            answer: 1,
+            rationale: "아스코르브산(Ascorbic acid)은 '괴혈병'을 뜻하는 'scorbutus'에 '없다'는 의미의 접두사 'a-'가 붙어 만들어진 이름입니다."
+        },
+        {
+            question: "대항해 시대에 괴혈병이 특히 위험했던 이유는?",
+            options: [
+                "의료 기술의 부족",
+                "장기 항해와 신선한 음식 부족",
+                "나쁜 위생 상태",
+                "선원들의 체력 부족"
+            ],
+            answer: 1,
+            rationale: "몇 달에 걸친 장기 항해 중 신선한 과일과 채소를 구하기 어려웠기 때문에 괴혈병이 만연했습니다."
+        },
+        {
+            question: "제임스 쿡 선장의 괴혈병 예방 방법에서 수병들이 처음에 보인 반응은?",
+            options: [
+                "적극적으로 받아들임",
+                "완전히 거부",
+                "무관심",
+                "부분적으로 수용"
+            ],
+            answer: 1,
+            rationale: "수병들은 이전에 경험하지 못한 싸워 크라우트(절인 양배추)를 처음에는 먹기를 꺼려했습니다."
+        },
+        {
+            question: "비타민 C가 부족하면 인체에 어떤 일이 발생하는가?",
+            options: [
+                "뼈 구조가 약해짐",
+                "콜라겐 합성이 제대로 되지 않음",
+                "근육량이 감소",
+                "신경계 기능 저하"
+            ],
+            answer: 1,
+            rationale: "비타민 C는 콜라겐을 만드는 과정에서 필수적인 요소이기 때문에, 비타민 C가 부족하면 콜라겐 합성이 제대로 이루어지지 않습니다."
+        },
+        {
+            question: "괴혈병의 정확한 원인이 과학적으로 규명된 해는?",
+            options: [
+                "1768년",
+                "1820년",
+                "1928년",
+                "1740년"
+            ],
+            answer: 2,
+            rationale: "1928년에 알버트 센트-죄르지가 비타민 C를 분리해내면서 괴혈병의 정확한 원인이 과학적으로 규명되었습니다."
+        },
+        {
+            question: "네덜란드인들이 장기 항해 중 사용했던 보존 식품은?",
+            options: [
+                "김치",
+                "싸워 크라우트",
+                "라임 주스",
+                "건조 고기"
+            ],
+            answer: 1,
+            rationale: "네덜란드인들은 장기 항해를 위해 비타민 C가 풍부한 발효된 양배추, 즉 싸워 크라우트를 사용했습니다."
+        },
+        {
+            question: "비타민 C 발견의 의의로 가장 중요한 것은?",
+            options: [
+                "새로운 영양 보충제 개발",
+                "괴혈병 정복",
+                "해상 무역의 발전",
+                "의료 기술의 혁신"
+            ],
+            answer: 1,
+            rationale: "비타민 C의 발견으로 수많은 선원의 목숨을 앗아갔던 괴혈병의 원인과 해결책이 명확해졌으며, 사실상 이 질병을 정복하는 계기가 되었습니다."
+        },
+        {
+            question: "현대 사회에서 비타민 섭취에 대한 논쟁의 핵심은?",
+            options: [
+                "비타민 과다 섭취의 위험성",
+                "비타민 부족 문제",
+                "자연식과 보충제의 균형",
+                "비타민 생산 기술"
+            ],
+            answer: 2,
+            rationale: "현대에는 다양한 보충제가 존재하므로, 자연 식품을 통한 비타민 섭취와 보충제의 적절한 균형에 대한 논의가 중요합니다."
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+
+    function createQuiz() {
+        quizData.forEach((item, index) => {
+            const questionElement = document.createElement('div');
+            questionElement.className = 'question';
+            questionElement.innerHTML = `<h2>${index + 1}. ${item.question}</h2>`;
+
+            const optionsList = document.createElement('ul');
+            optionsList.className = 'options';
+
+            item.options.forEach((option, optionIndex) => {
+                const optionItem = document.createElement('li');
+                optionItem.textContent = option;
+                optionItem.addEventListener('click', () => checkAnswer(optionItem, optionIndex, item.answer, item.rationale));
+                optionsList.appendChild(optionItem);
+            });
+
+            const feedbackElement = document.createElement('div');
+            feedbackElement.className = 'feedback';
+
+            questionElement.appendChild(optionsList);
+            questionElement.appendChild(feedbackElement);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function checkAnswer(selectedOption, selectedIndex, correctAnswer, rationale) {
+        const feedbackElement = selectedOption.parentElement.nextElementSibling;
+        
+        // Remove previous feedback
+        feedbackElement.style.display = 'none';
+        
+        // Remove previous color highlights
+        Array.from(selectedOption.parentElement.children).forEach(option => {
+            option.style.backgroundColor = '';
+        });
+
+        if (selectedIndex === correctAnswer) {
+            feedbackElement.textContent = '정답입니다! 🎉';
+            feedbackElement.className = 'feedback correct';
+            selectedOption.style.backgroundColor = '#c8e6c9';
+        } else {
+            feedbackElement.innerHTML = `오답입니다. 😞<br><br>정답은: <strong>${quizData[quizData.findIndex(q => q.question === selectedOption.parentElement.previousElementSibling.textContent.substring(3).trim())].options[correctAnswer]}</strong><br><strong>해설:</strong> ${rationale}`;
+            feedbackElement.className = 'feedback incorrect';
+            selectedOption.style.backgroundColor = '#ffcdd2';
+        }
+        feedbackElement.style.display = 'block';
+    }
+
+    window.onload = createQuiz;
+</script>
+
+</body>
+</html>
